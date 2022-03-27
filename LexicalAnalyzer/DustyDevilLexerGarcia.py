@@ -66,7 +66,7 @@ TT_RPAREN   = '<rparenthesis>'
 TT_COLON    = '<colon>'
 TT_SCOLON   = '<semicolon>'
 TT_EQUAL    = '<equal>'
-TT_COLONEQUAL    = '<colonequal>'
+TT_ASSIGN    = '<assign>'
 
 #TT_IDENT    = 'IDENT'
 #TT_EQUAL    = 'ASSIGN_OP'
@@ -152,7 +152,7 @@ class LexicalAnalyzer:
             elif self.current_char == ':':
                 self.advance()
                 if self.current_char == '=':
-                    tokens.append(Token(TT_COLONEQUAL))
+                    tokens.append(Token(TT_ASSIGN))
                     self.advance()
                 else:
                     tokens.append(Token(TT_COLON))
@@ -185,9 +185,9 @@ class LexicalAnalyzer:
             self.advance()
 
         if dot_count == 0:
-            return Token(TT_DIGIT)#, int(num_str))
+            return Token(TT_DIGIT, int(num_str))
         else:
-            return Token(TT_FLOAT)#, float(num_str))
+            return Token(TT_FLOAT, float(num_str))
     
     
     def make_word(self):
@@ -200,13 +200,13 @@ class LexicalAnalyzer:
             self.advance()
 
         if char_count == 1:
-            return Token(TT_CHAR)#, int(num_str))
+            return Token(TT_CHAR, str(word_str))
         elif word_str == 'PROG_START' or word_str == 'PROG_END':
             return Token(TT_PROGRAM)
         elif word_str == 'Write':
             return Token(TT_WRITE)
         else:
-            return Token(TT_VAR)#, float(num_str))
+            return Token(TT_IDENT)#, float(num_str))
     
 
 #######################################
