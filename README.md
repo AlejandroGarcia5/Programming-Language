@@ -25,3 +25,7 @@ BNF rules for the language:
    * factor    ->>> ( expr ) | var | integer
    * integer   ->>> digit | digit integer
    * digit     ->>> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+3. Interpreter
+
+    * Code takes the parse tree created from the parser and it performs the operations from the initial code.
