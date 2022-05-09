@@ -584,6 +584,8 @@ class Parser:
                 self.current_tok.pos_start, self.current_tok.pos_end,
                 "Input Error"
             ))
+        sourceFile = open("DustyDevil+.out.txt", 'w')
+        print('Welcome to the DustyDevil Programming Language! \n', file = sourceFile)
         return res
 
     ###################################
@@ -1003,36 +1005,7 @@ class Number:
     
     def __repr__(self):
         return str(self.value)
-'''  
-class Stmts:
-    def __init__(self, value):
-        self.value = value
-        self.set_pos()
-        self.set_context1()
 
-    def set_pos(self, pos_start=None, pos_end=None):
-        self.pos_start = pos_start
-        self.pos_end = pos_end
-        return self
-
-    def set_context1(self, context=None):
-        self.context = context
-        return self
-
-    def stmts(self, other):
-        if isinstance(other, Number):
-            return Number(self.value , other.value).set_context1(self.context), None
-
-   
-    def copy(self):
-        copy = Number(self.value)
-        copy.set_pos(self.pos_start, self.pos_end)
-        copy.set_context1(self.context)
-        return copy
-    
-    def __repr__(self):
-        return str(self.value)
-'''
 
 #######################################
 # CONTEXT
@@ -1069,6 +1042,7 @@ class SymbolTable:
 #######################################
 # INTERPRETER
 #######################################
+
 
 class Interpreter:
     def visit(self, node, context):
@@ -1114,14 +1088,7 @@ class Interpreter:
         
         return res.success(left)#.set_pos(node.pos_start, node.pos_end))
         
-        '''
-        var_name = node.left_node
-        value = res.register(self.visit(var_name, context))
-        if res.error: return res
-
-        #context.symbol_table.set(var_name, value)
-        return res.success(value)
-        '''
+        
         
     def visit_StmtNode(self, node, context):
         res = RTResult()
@@ -1141,7 +1108,8 @@ class Interpreter:
     def visit_VarNode(self, node, context):
         res = RTResult()
         var_name = node.var_name_tok.value
-        #value = context.symbol_table.get(var_name)
+        
+        
         value = global_symbol_table.get(var_name)
         
         if not value:
@@ -1152,7 +1120,18 @@ class Interpreter:
             ))
 
         #value = value.copy().set_pos(node.pos_start, node.pos_end)
+        sourceFile = open("DustyDevil+.out.txt", 'a')
+        print(f'{var_name} = {value}', file = sourceFile)
+        print(f'{var_name} = {value}')
         return res.success(value)
+    
+    
+    def visit_VarlNode(self, node, context):
+        
+        res = RTResult()
+        value = res.register(self.visit(node.tok , context))
+        return res.success(value)
+    
     
     def visit_VarlOpNode(self, node, context):
         res = RTResult()
@@ -1161,7 +1140,7 @@ class Interpreter:
         right = res.register(self.visit(node.right_node, context))
         if res.error: return res
 
-        left = StmtsOpNode(left, right)
+        left = VarlOpNode(left, '', right)
         
         return res.success(left)
 
@@ -1183,38 +1162,29 @@ class Interpreter:
     
     def visit_WriteNode(self, node, context):
         res = RTResult()
-        var_name = node.op_tok3
-        var_name1 = str(var_name)
-        var_name2 = var_name1[1:-1]
-        value = context.symbol_table.get(var_name2)
-        #value = global_symbol_table.get(var_name)
+        value = res.register(self.visit(node.op_tok3, context))
         
-        
-        if not value:
-            return res.failure(RTError(
-                node.pos_start, node.pos_end,
-                f"'{var_name}' is not defined",
-                context
-            ))
-
-        #value = value.copy().set_pos(node.pos_start, node.pos_end)
         return res.success(value)
-    
+        
     def visit_ReadNode(self, node, context):
+        
         res = RTResult()
         var_name = node.op_tok3
         var_name1 = str(var_name)
-        var_name2 = var_name1[1:-1]
         
-        value = input(f"Enter a value for {var_name2}: ")
-        value = int(value)
-        value = Number(value)
+        new = var_name1.split(", ")
+        for x in range(0, len(new), 2):
+            var_name1 = new[x]
+            var_name2 = var_name1[1:-1]
+            value = input(f"Enter a value for {var_name2}: ")
+            value = int(value)
+            value = Number(value)
+            if res.error: return res
         
-        if res.error: return res
+            context.symbol_table.set(var_name2, value)
         
-        context.symbol_table.set(var_name2, value)
-        return res.success(value)
-
+        return res.success('')
+        
     def visit_BinOpNode(self, node, context):
         res = RTResult()
         left = res.register(self.visit(node.left_node, context))

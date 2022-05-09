@@ -27,7 +27,7 @@ import DustyDevilInterpreterGarcia
 #All of the following is marked out because this is what I used to individually test values.
 #This is done to be able to check if my functions are working while I am coding.
 #Testing little by little is the best way to create a program.
-
+'''
 while True:
     text = input('DustyDevilInterpreterGarcia > ')
     result, error = DustyDevilInterpreterGarcia.run('<stdin>', text)
@@ -35,7 +35,7 @@ while True:
     else: print(result)
 '''
 
-#The following opens the text file containing the input and it passes it through the run fucntion.
+#The following opens the text file containing the input and it passes it through the run function.
 #It outputs the results to the mentioned output file as well to the console.
 #If error, it outputs the errors. 
 
@@ -52,10 +52,10 @@ else: print(result)
 
 #Print to file
 
-sourceFile = open("DustyDevil+.out.txt", 'w')
+sourceFile = open("DustyDevil+.out.txt", 'a')
 if error: print(error.as_string(), file = sourceFile)
 else: print(result, file = sourceFile)
 #print("\nNumber of tokens: {}".format(len(result)), file = sourceFile)
 sourceFile.close()
 
-#print("\nNumber of tokens: {}".format(len(result)))'''
+#print("\nNumber of tokens: {}".format(len(result)))
