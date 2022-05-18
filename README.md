@@ -4,7 +4,7 @@
 
     * Code takes in an input file and reads each character, ignoring spaces and comments, and creates tokens that will then be passed to the parser.
     
-2. Parser
+2. Syntax Analyzer (Parser)
 
     * Code takes the tokens created from the lexical analyzer and it creates a parser three if there is no errors or the BNF rules of our language correlate.
 
